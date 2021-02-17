@@ -1,63 +1,22 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">aplicacion_de_productividad</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+  <div class="container my-5">
+    <b-button class="fs-6" variant="light" size="lg">
+      Agregar lista <i class="fas fa-plus"></i>
+    </b-button>
+    <div class="shadow mt-2 p-3 rounded" style="width: 90%; max-width: 15rem">
+      <b-form-input
+        id="inline-form-input-name"
+        class="mb-2 mr-sm-2 mb-sm-0"
+        placeholder="Nombre de la lista"
+      ></b-form-input>
+      <div class="d-flex">
+        <b-button pill class="mt-2" variant="outline-success">
+          Agregar lista
+        </b-button>
+        <div class="ml-3 mt-3 pointer">
+          <i class="pointer fas fa-times"></i>
+        </div>
       </div>
     </div>
   </div>
 </template>
-
-<script>
-export default {}
-</script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
