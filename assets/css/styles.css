@@ -1,3 +1,7 @@
 .pointer {
   cursor: pointer;
 }
+.invalid-text {
+  font-size: 0.8rem;
+  color: red;
+}
