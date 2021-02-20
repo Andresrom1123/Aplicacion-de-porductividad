@@ -1,7 +1,10 @@
-.pointer {
+.-pointer {
   cursor: pointer;
 }
-.invalid-text {
+.-invalid-text {
   font-size: 0.8rem;
   color: red;
+}
+.-bg-grey {
+  background: #807f8014;
 }
