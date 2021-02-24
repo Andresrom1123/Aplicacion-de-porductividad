@@ -8,12 +8,15 @@
       >
         <div
           class="shadow -bg-grey"
-          :class="lists[index].status === 'creating' ? 'p-3' : 'pb-2 pl-2'"
+          :class="lists[index].status === 'creating' ? 'p-3' : ''"
         >
           <!-- Lista 'saved' -->
           <div v-if="lists[index].status === 'saved'">
             <!-- Lista header -->
-            <div>
+            <div
+              id="list-header"
+              :class="v.$model.cards.length > 0 ? 'border-bottom' : ''"
+            >
               <!-- Titulo de la lista y botón de eliminar -->
               <div class="d-flex">
                 <b-form-input
@@ -24,8 +27,8 @@
                     border: 1px solid #ced4da00 !important;
                   "
                   :readonly="titleList"
+                  :class="v.name.$error ? 'is-invalid' : ''"
                   @click="!titleList"
-                  :class="v.$error ? 'is-invalid' : ''"
                 ></b-form-input>
                 <div class="mt-2 col-2">
                   <i
@@ -49,29 +52,50 @@
                 </span>
               </div>
               <!-- Fin validaciones del tiulo de la lista -->
-              <!-- Botón de agregar una tarea -->
-              <div class="mr-2">
-                <b-button
-                  class="fs-6"
-                  variant="light"
-                  size="lg"
-                  @click="addCard(v, index)"
-                  block
-                >
-                  <i class="fas fa-plus"></i> Agrega una tarea
-                </b-button>
-              </div>
-              <!-- Fin botón de agregar un tarea -->
             </div>
             <!-- Fin lista header -->
             <!-- Lista body -->
             <div
-              v-for="(vCard, indexCard) in $v.lists.cards.$each.$iter"
-              :key="indexCard"
+              id="list-body"
+              :class="v.$model.cards.length > 0 ? 'px-3 pt-3 pb-0' : ''"
             >
-              xd
+              <div
+                v-for="(vCard, indexCard) in v.cards.$each.$iter"
+                :key="indexCard"
+              >
+                <b-form-textarea
+                  id="textarea"
+                  v-model="vCard.title.$model"
+                  placeholder="Titulo de la tarjeta..."
+                  rows="3"
+                  max-rows="4"
+                  :class="vCard.title.$error ? 'is-invalid' : ''"
+                  :readonly="indexCard != v.cards.$model.length - 1"
+                ></b-form-textarea>
+                <div class="mb-3">
+                  <span
+                    v-if="!vCard.title.required && vCard.title.$error"
+                    class="-invalid-text"
+                  >
+                    El titulo de la tarjeta es requerido.
+                  </span>
+                </div>
+              </div>
             </div>
             <!-- Fin lista body -->
+            <!-- Botón de agregar una tarea -->
+            <div>
+              <b-button
+                class="fs-6"
+                variant="light"
+                size="lg"
+                block
+                @click="addCard(v, index)"
+              >
+                <i class="fas fa-plus"></i> Agrega una tarea
+              </b-button>
+            </div>
+            <!-- Fin botón de agregar un tarea -->
           </div>
           <!-- Fin lista 'saved' -->
           <!-- Form lista 'creating' - -->
@@ -81,15 +105,21 @@
           >
             <b-form-input
               v-model.trim="v.name.$model"
-              :class="v.$error && v.cards.length === 0 ? 'is-invalid' : ''"
+              :class="v.name.$error ? 'is-invalid' : ''"
               class="mb-2 mr-sm-2 mb-sm-0"
               placeholder="Nombre de la lista"
             ></b-form-input>
             <div>
-              <span v-if="!v.name.required && v.$error" class="-invalid-text">
+              <span
+                v-if="!v.name.required && v.name.$error"
+                class="-invalid-text"
+              >
                 El nombre de lista es requerido.
               </span>
-              <span v-if="!v.name.maxLength && v.$error" class="-invalid-text">
+              <span
+                v-if="!v.name.maxLength && v.name.$error"
+                class="-invalid-text"
+              >
                 El nombre de la lista no debe tener más de
                 {{ v.name.$params.maxLength.max }} letras.
               </span>
@@ -134,8 +164,10 @@ export default {
     lists: {
       $each: {
         cards: {
-          title: {
-            required,
+          $each: {
+            title: {
+              required,
+            },
           },
         },
         name: {
@@ -165,7 +197,7 @@ export default {
     },
     addCard(list, index) {
       list.$touch()
-      if (!list.$invalid) {
+      if (!list.name.$invalid && !list.cards.$invalid) {
         const newCard = {
           title: '',
         }
