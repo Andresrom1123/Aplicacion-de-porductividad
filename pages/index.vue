@@ -63,15 +63,28 @@
                 v-for="(vCard, indexCard) in v.cards.$each.$iter"
                 :key="indexCard"
               >
-                <b-form-textarea
-                  id="textarea"
-                  v-model="vCard.title.$model"
-                  placeholder="Titulo de la tarjeta..."
-                  rows="3"
-                  max-rows="4"
-                  :class="vCard.title.$error ? 'is-invalid' : ''"
-                  :readonly="indexCard != v.cards.$model.length - 1"
-                ></b-form-textarea>
+                <div class="d-flex">
+                  <b-form-textarea
+                    id="textarea"
+                    v-model="vCard.title.$model"
+                    placeholder="Titulo de la tarjeta..."
+                    rows="1"
+                    max-rows="4"
+                    class="col-10 overflow-hidden"
+                    style="background-color: #ffffff !important"
+                    :class="[
+                      { 'is-invalid': vCard.title.$error },
+                      {
+                        '-pointer': lists[index].cards[indexCard].status,
+                      },
+                    ]"
+                  ></b-form-textarea>
+                  <i
+                    class="col-1 -pointer fas fa-times text-muted"
+                    @click="removeCard(index, indexCard)"
+                  >
+                  </i>
+                </div>
                 <div class="mb-3">
                   <span
                     v-if="!vCard.title.required && vCard.title.$error"
@@ -200,9 +213,17 @@ export default {
       if (!list.name.$invalid && !list.cards.$invalid) {
         const newCard = {
           title: '',
+          status: false,
         }
         this.lists[index].cards.push(newCard)
+        const cardsLength = this.lists[index].cards.length
+        if (cardsLength > 1) {
+          this.lists[index].cards[cardsLength - 2].status = true
+        }
       }
+    },
+    removeCard(indexList, indexCard) {
+      this.lists[indexList].cards.splice(indexCard, 1)
     },
   },
 }
